@@ -1,5 +1,13 @@
 [package]
 
 name = "memcmp"
-version = "0.0.1"
+version = "0.0.2"
+description = "Optimized memory comparisons for u8 slices ([u8])"
+license = "MIT"
+documentation = "https://github.com/daramos/rust-memcmp"
+homepage = "https://github.com/daramos/rust-memcmp"
+repository = "https://github.com/daramos/rust-memcmp"
+readme = "README.md"
+keywords = ["memcmp","compare"]
+
 authors = ["Daniel Ramos <dan@daramos.com>"]
