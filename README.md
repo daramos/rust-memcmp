@@ -1,4 +1,5 @@
 # rust-memcmp
+[![Build status](https://api.travis-ci.org/daramos/rust-memcmp.png)](https://travis-ci.org/daramos/rust-memcmp)
 Optimized comparisons for integer slices. 
 Use memcmp to compare integer slices efficiently.
 
