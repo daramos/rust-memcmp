@@ -8,7 +8,7 @@ impl Memcmp for [u8] {
     #[inline(always)]
     fn memcmp(&self, b: &[u8]) -> bool {
        #[allow(improper_ctypes)]
-        extern { fn memcmp(s1: *const i8, s2: *const i8, n: uint) -> i32; }
+        extern { fn memcmp(s1: *const i8, s2: *const i8, n: usize) -> i32; }
         self.len() == b.len() && unsafe {
             memcmp(self.as_ptr() as *const i8,
                    b.as_ptr() as *const i8,
