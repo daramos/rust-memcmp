@@ -9,15 +9,12 @@ Workaround for [Rust issue 16913](https://github.com/rust-lang/rust/issues/16913
 ```rust
 #[bench]
 fn slice_cmp(b: &mut test::Bencher) {
-    let test_val1 : Vec<u8> = repeat('c' as u8).take(1000000).collect();
-    let test_val2 : Vec<u8> = test_val1.clone();
+    let vec1 = repeat(b'c').take(10_000).collect::<Vec<_>>();
+    let vec2 = vec1.clone();
     
-    b.bytes = test_val1.len() as u64;
-    let slice1 = test_val1.as_slice();
-    let slice2 = test_val2.as_slice();
+    b.bytes = vec1.len() as u64;
     b.iter(|| {
-        let s1 = slice1.clone();
-        let s2 = slice2.clone();
+        let (s1, s2) = ( &*vec1, &*vec2 );
         return s1==s2
     });
 }
@@ -29,16 +26,13 @@ extern crate memcmp;
 use memcmp::Memcmp;
 #[bench]
 fn memcmp_cmp(b: &mut test::Bencher) {
-    let test_val1 : Vec<u8> = repeat('c' as u8).take(1000000).collect();
-    let test_val2 : Vec<u8> = test_val1.clone();
+    let vec1 = repeat(b'c').take(10_000).collect::<Vec<_>>();
+    let vec2 = vec1.clone();
     
-    b.bytes = test_val1.len() as u64;
-    let slice1 = test_val1.as_slice();
-    let slice2 = test_val2.as_slice();
+    b.bytes = vec1.len() as u64;
     b.iter(|| {
-        let s1 = slice1.clone();
-        let s2 = slice2.clone();
-        return s1.memcmp(s2);
+        let (s1, s2) = ( &*vec1, &*vec2 );
+        return s1.memcmp(s2)
     });
 }
 ```
