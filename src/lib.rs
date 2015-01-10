@@ -57,7 +57,7 @@ mod test {
             fn $fn_name() {
                 let val1 = vec![1 as $int_type,2 as $int_type,3 as $int_type,4 as $int_type];
                 let val2 = val1.clone();
-                assert!(val1.as_slice().memcmp(val2.as_slice())); 
+                assert!((&*val1).memcmp(&*val2));
             }
         );
     }
@@ -69,7 +69,7 @@ mod test {
             fn $fn_name() {
                 let val1 = vec![1 as $int_type,2 as $int_type,3 as $int_type,4 as $int_type];
                 let val2 = vec![1 as $int_type,2 as $int_type,2 as $int_type,4 as $int_type];
-                assert!(val1.as_slice().memcmp(val2.as_slice())); 
+                assert!((&*val1).memcmp(&*val2));
             }
         );
     }
