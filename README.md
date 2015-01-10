@@ -1,9 +1,11 @@
 # rust-memcmp
-Optimized comparisons for u8 slices. 
-Use memcmp to compare u8 slices efficiently.
+Optimized comparisons for integer slices. 
+Use memcmp to compare integer slices efficiently.
+
+Workaround for [Rust issue 16913](https://github.com/rust-lang/rust/issues/16913).
 
 ###Baseline PartialEq comparison:
-####test test::slice_cmp ... bench:   2002387 ns/iter (+/- 25872) = 499 MB/s
+####test test::u8_slice_cmp  ... bench:      2201 ns/iter (+/- 113) = 454 MB/s
 ```rust
 #[bench]
 fn slice_cmp(b: &mut test::Bencher) {
@@ -21,7 +23,7 @@ fn slice_cmp(b: &mut test::Bencher) {
 }
 ```
 ###Using this crate:
-###test test::memcmp_cmp  ... bench:     55611 ns/iter (+/- 10529) = 17982 MB/s
+###test test::u8_memcmp     ... bench:        33 ns/iter (+/- 2) = 30303 MB/s
 ```rust
 extern crate memcmp;
 use memcmp::Memcmp;
