@@ -1,3 +1,6 @@
+#![feature(test)]
+extern crate test;
+
 pub trait Memcmp {
     fn memcmp(self: &Self, b: &Self) -> bool;
 }
@@ -46,10 +49,11 @@ memcmp_impl!(i64,64);
 
 
 #[cfg(test)]
-mod test {
-    extern crate test;
+mod tests {
+    
     use  std::iter::repeat;
     use ::Memcmp;
+    use ::test;
 
     macro_rules! test_equals {
         ($int_type:ty, $fn_name:ident) => (
