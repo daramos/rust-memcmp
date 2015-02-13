@@ -1,7 +1,7 @@
 [package]
 
 name = "memcmp"
-version = "0.0.4"
+version = "0.0.5"
 description = "Optimized memory comparisons for integer slices. Temporary solution until rust issue 16913 is resolved."
 license = "MIT"
 documentation = "https://github.com/daramos/rust-memcmp"
