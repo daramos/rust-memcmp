@@ -1,3 +1,5 @@
+#![feature(core)]
+
 #![feature(test)]
 extern crate test;
 
@@ -29,8 +31,8 @@ macro_rules! memcmp_impl {
                 let u8_len = self.len() * bytes;
                 let self_ptr = self.as_ptr() as *const u8;
                 let b_ptr = b.as_ptr() as *const u8;
-                let self_as_bytes = unsafe {std::slice::from_raw_buf(&self_ptr,u8_len)};
-                let b_as_bytes = unsafe {std::slice::from_raw_buf(&b_ptr,u8_len)};
+                let self_as_bytes = unsafe {std::slice::from_raw_parts(self_ptr,u8_len)};
+                let b_as_bytes = unsafe {std::slice::from_raw_parts(b_ptr,u8_len)};
                 return self_as_bytes.memcmp(b_as_bytes);
             }
         }
