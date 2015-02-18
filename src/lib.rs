@@ -52,8 +52,6 @@ memcmp_impl!(i64,64);
 
 #[cfg(test)]
 mod tests {
-    
-    use  std::iter::repeat;
     use ::Memcmp;
     use ::test;
 
@@ -63,7 +61,7 @@ mod tests {
             fn $fn_name() {
                 let val1 = vec![1 as $int_type,2 as $int_type,3 as $int_type,4 as $int_type];
                 let val2 = val1.clone();
-                assert!((&*val1).memcmp(&*val2));
+                assert!((&val1).memcmp(&val2));
             }
         );
     }
@@ -75,7 +73,7 @@ mod tests {
             fn $fn_name() {
                 let val1 = vec![1 as $int_type,2 as $int_type,3 as $int_type,4 as $int_type];
                 let val2 = vec![1 as $int_type,2 as $int_type,2 as $int_type,4 as $int_type];
-                assert!((&*val1).memcmp(&*val2));
+                assert!((&val1).memcmp(&val2));
             }
         );
     }
@@ -86,12 +84,13 @@ mod tests {
             #[bench]
             fn $fn_name(b: &mut test::Bencher) {
                 let num_bytes = ($bits)/8;
-                let vec1 = repeat('c' as $int_type).take(10_000).collect::<Vec<_>>();
+                let val = 'c' as $int_type;
+                let vec1 = vec![val;10_000];
                 let vec2 = vec1.clone();
                 
                 b.bytes = (vec1.len() * (num_bytes)) as u64;
                 b.iter(|| {
-                    let (s1, s2) = ( &*vec1, &*vec2 );
+                    let (s1, s2) = ( &vec1, &vec2 );
                     return s1==s2
                 });
             }
@@ -104,12 +103,13 @@ mod tests {
             #[bench]
             fn $fn_name(b: &mut test::Bencher) {
                 let num_bytes = ($bits)/8;
-                let vec1 = repeat('c' as $int_type).take(10_000).collect::<Vec<_>>();
+                let val = 'c' as $int_type;
+                let vec1 = vec![val;10_000];
                 let vec2 = vec1.clone();
                 
                 b.bytes = (vec1.len() * (num_bytes)) as u64;
                 b.iter(|| {
-                    let (s1, s2) = ( &*vec1, &*vec2 );
+                    let (s1, s2) = ( &vec1, &vec2 );
                     return s1.memcmp(s2)
                 });
             }

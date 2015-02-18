@@ -10,12 +10,12 @@ Workaround for [Rust issue 16913](https://github.com/rust-lang/rust/issues/16913
 ```rust
 #[bench]
 fn slice_cmp(b: &mut test::Bencher) {
-    let vec1 = repeat(b'c').take(10_000).collect::<Vec<_>>();
+    let vec1 = vec![b'c';10_000];
     let vec2 = vec1.clone();
     
     b.bytes = vec1.len() as u64;
     b.iter(|| {
-        let (s1, s2) = ( &*vec1, &*vec2 );
+        let (s1, s2) = ( &vec1, &vec2 );
         return s1==s2
     });
 }
@@ -27,12 +27,12 @@ extern crate memcmp;
 use memcmp::Memcmp;
 #[bench]
 fn memcmp_cmp(b: &mut test::Bencher) {
-    let vec1 = repeat(b'c').take(10_000).collect::<Vec<_>>();
+    let vec1 = vec![b'c';10_000];
     let vec2 = vec1.clone();
     
     b.bytes = vec1.len() as u64;
     b.iter(|| {
-        let (s1, s2) = ( &*vec1, &*vec2 );
+        let (s1, s2) = ( &vec1, &vec2 );
         return s1.memcmp(s2)
     });
 }
