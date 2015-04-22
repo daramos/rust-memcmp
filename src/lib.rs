@@ -1,7 +1,4 @@
-#![feature(core)]
-
-#![feature(test)]
-extern crate test;
+#![cfg_attr(all(test, feature = "nightly"), feature(test))]
 
 pub trait Memcmp {
     fn memcmp(self: &Self, b: &Self) -> bool;
@@ -49,11 +46,9 @@ memcmp_impl!(i32,32);
 memcmp_impl!(i64,64);
 
 
-
 #[cfg(test)]
 mod tests {
-    use ::Memcmp;
-    use ::test;
+    use super::*;
 
     macro_rules! test_equals {
         ($int_type:ty, $fn_name:ident) => (
@@ -65,11 +60,11 @@ mod tests {
             }
         );
     }
-    
+
     macro_rules! test_not_equals {
         ($int_type:ty, $fn_name:ident) => (
             #[test]
-            #[should_fail(expected = "assertion failed")]
+            #[should_panic(expected = "assertion failed")]
             fn $fn_name() {
                 let val1 = vec![1 as $int_type,2 as $int_type,3 as $int_type,4 as $int_type];
                 let val2 = vec![1 as $int_type,2 as $int_type,2 as $int_type,4 as $int_type];
@@ -77,8 +72,36 @@ mod tests {
             }
         );
     }
-    
-    
+
+
+    test_equals!(u8,u8_eq);
+    test_equals!(u16,u16_eq);
+    test_equals!(u32,u32_eq);
+    test_equals!(u64,u64_eq);
+
+    test_equals!(i8,i8_eq);
+    test_equals!(i16,i16_eq);
+    test_equals!(i32,i32_eq);
+    test_equals!(i64,i64_eq);
+
+    test_not_equals!(u8,u8_not_eq);
+    test_not_equals!(u16,u16_not_eq);
+    test_not_equals!(u32,u32_not_eq);
+    test_not_equals!(u64,u64_not_eq);
+
+    test_not_equals!(i8,i8_not_eq);
+    test_not_equals!(i16,i16_not_eq);
+    test_not_equals!(i32,i32_not_eq);
+    test_not_equals!(i64,i64_not_eq);
+}
+
+#[cfg(feature="nightly")]
+#[cfg(test)]
+mod bench {
+    extern crate test;
+    use super::*;
+
+
     macro_rules! memcmp_bench_slice {
         ($int_type:ty, $bits:expr, $fn_name:ident) => ( // ex. (u16, 16, u16_slice_cmp)
             #[bench]
@@ -87,7 +110,7 @@ mod tests {
                 let val = 'c' as $int_type;
                 let vec1 = vec![val;10_000];
                 let vec2 = vec1.clone();
-                
+
                 b.bytes = (vec1.len() * (num_bytes)) as u64;
                 b.iter(|| {
                     let (s1, s2) = ( &vec1, &vec2 );
@@ -97,7 +120,7 @@ mod tests {
 
         );
     }
-    
+
     macro_rules! memcmp_bench_memcmp {
         ($int_type:ty, $bits:expr, $fn_name:ident) => ( // ex. (u16, 16,u16_memcmp)
             #[bench]
@@ -106,7 +129,7 @@ mod tests {
                 let val = 'c' as $int_type;
                 let vec1 = vec![val;10_000];
                 let vec2 = vec1.clone();
-                
+
                 b.bytes = (vec1.len() * (num_bytes)) as u64;
                 b.iter(|| {
                     let (s1, s2) = ( &vec1, &vec2 );
@@ -116,42 +139,22 @@ mod tests {
 
         );
     }
-    test_equals!(u8,u8_eq);
-    test_equals!(u16,u16_eq);
-    test_equals!(u32,u32_eq);
-    test_equals!(u64,u64_eq);
-    
-    test_equals!(i8,i8_eq);
-    test_equals!(i16,i16_eq);
-    test_equals!(i32,i32_eq);
-    test_equals!(i64,i64_eq);
-    
-    test_not_equals!(u8,u8_not_eq);
-    test_not_equals!(u16,u16_not_eq);
-    test_not_equals!(u32,u32_not_eq);
-    test_not_equals!(u64,u64_not_eq);
-    
-    test_not_equals!(i8,i8_not_eq);
-    test_not_equals!(i16,i16_not_eq);
-    test_not_equals!(i32,i32_not_eq);
-    test_not_equals!(i64,i64_not_eq);
-    
-    
+
     memcmp_bench_slice!(u8,8,u8_slice_cmp);
     memcmp_bench_slice!(u16,16,u16_slice_cmp);
     memcmp_bench_slice!(u32,32,u32_slice_cmp);
     memcmp_bench_slice!(u64,64,u64_slice_cmp);
-    
+
     memcmp_bench_slice!(i8,8,i8_slice_cmp);
     memcmp_bench_slice!(i16,16,i16_slice_cmp);
     memcmp_bench_slice!(i32,32,i32_slice_cmp);
     memcmp_bench_slice!(i64,64,i64_slice_cmp);
-    
+
     memcmp_bench_memcmp!(u8,8,u8_memcmp);
     memcmp_bench_memcmp!(u16,16,u16_memcmp);
     memcmp_bench_memcmp!(u32,32,u32_memcmp);
     memcmp_bench_memcmp!(u64,64,u64_memcmp);
-    
+
     memcmp_bench_memcmp!(i8,8,i8_memcmp);
     memcmp_bench_memcmp!(i16,16,i16_memcmp);
     memcmp_bench_memcmp!(i32,32,i32_memcmp);

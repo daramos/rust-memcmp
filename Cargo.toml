@@ -11,3 +11,6 @@ readme = "README.md"
 keywords = ["memcmp","compare"]
 
 authors = ["Daniel Ramos <dan@daramos.com>"]
+
+[features]
+nightly = []
